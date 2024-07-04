@@ -1,6 +1,6 @@
 import type { Mongoose } from "mongoose";
 import sha3 from "crypto-js/sha3.js";
-import isemail from "isemail";
+import { validate as isemail } from "email-validator";
 import random from "@cch137/random";
 import EmailAddressVerifier from "./email-verifier.js";
 import Mailer, { type MailerOptions } from "./mailer.js";
@@ -115,7 +115,7 @@ export default class Auth extends MongooseBase {
   }
 
   static safeEmailAddress(email: string) {
-    if (!isemail.validate(email)) throw ERR_INVALID_EMAIL_FORMAT;
+    if (!isemail(email)) throw ERR_INVALID_EMAIL_FORMAT;
     return email;
   }
 

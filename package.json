@@ -1,9 +1,10 @@
 {
   "name": "@cch137/auth",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "type": "module",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "devbuild": "tsc -w",
     "devstart": "nodemon ./dist/index.test.js",
@@ -16,11 +17,11 @@
   "author": "cch137",
   "license": "ISC",
   "dependencies": {
-    "@cch137/random": "^0.1.0",
-    "@cch137/shuttle": "^0.2.0",
+    "@cch137/random": "^0.1.2",
+    "@cch137/shuttle": "^0.2.3",
+    "@types/mongoose": "^5.11.97",
     "crypto-js": "^4.2.0",
     "isemail": "^3.2.0",
-    "moongose": "^1.0.0",
     "nodemailer": "^6.9.14"
   },
   "devDependencies": {

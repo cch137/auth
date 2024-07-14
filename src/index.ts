@@ -222,7 +222,6 @@ export default class Auth extends MongooseBase {
   }
 
   async changePassword(form: {
-    id: string;
     password: string;
     email: string;
     code: string;
@@ -239,16 +238,17 @@ export default class Auth extends MongooseBase {
     code,
     oldPassword,
   }: {
-    id: string;
+    id?: string;
     password: string;
     emailAddress?: string;
     code?: string;
     oldPassword?: string;
   }) {
     try {
-      if (!id) throw ERR_NO_USER;
+      if (!password || typeof password !== "string") throw ERR_INVALID_FORM;
       if (typeof oldPassword === "string") {
         // change password by old password
+        if (!id) throw ERR_NO_USER;
         await this.User.updateOne(
           { id, pw: oldPassword },
           { $set: { pw: hashPassword(password) } }
@@ -258,7 +258,7 @@ export default class Auth extends MongooseBase {
         // change password by verification code
         if (!this.eav.verify(emailAddress, code)) throw ERR_EAV;
         await this.User.updateOne(
-          { id, ea: emailAddress },
+          { ea: emailAddress },
           { $set: { pw: hashPassword(password) } }
         );
         return successResult();

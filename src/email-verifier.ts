@@ -38,7 +38,7 @@ class Verification {
   }
 
   verify(code: string) {
-    if (++this.verifyTryTimes >= Verification.MAX_TRIES) {
+    if (++this.verifyTryTimes > Verification.MAX_TRIES) {
       this.kill();
       return false;
     }
@@ -66,7 +66,7 @@ export default class EmailAddressVerifier {
       `Verification code - ${this.appName}`,
       `Here is your ${this.appName} verification code:\n\n${verification.code}\n\n` +
         "Do not share this information with anyone.\n" +
-        "The verification code is valid for 10 minutes.\n" +
+        "The verification code is valid for 10 minutes and can only be attempted 3 times.\n" +
         "If you are unsure of the intended purpose of this code, kindly disregard this email.\n" +
         "This is an automated email. Please do not reply."
     );

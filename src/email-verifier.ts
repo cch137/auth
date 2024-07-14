@@ -38,12 +38,11 @@ class Verification {
   }
 
   verify(code: string) {
-    this.verifyTryTimes++;
     if (++this.verifyTryTimes >= Verification.MAX_TRIES) {
       this.kill();
       return false;
     }
-    return code !== this.code;
+    return code === this.code;
   }
 }
 

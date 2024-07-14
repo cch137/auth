@@ -215,7 +215,7 @@ export default class Auth extends MongooseBase {
         rl: [],
         ct: new Date(),
       });
-      return successResult({ id });
+      return successResult({ id, username: un });
     } catch (e) {
       return errorResult(e);
     }

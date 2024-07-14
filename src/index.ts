@@ -223,7 +223,7 @@ export default class Auth extends MongooseBase {
 
   async changePassword(form: {
     password: string;
-    email: string;
+    emailAddress: string;
     code: string;
   }): Promise<Result>;
   async changePassword(form: {

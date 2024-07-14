@@ -23,10 +23,14 @@ function uint8ArrayToBase64Url(uint8Array: Uint8Array) {
     .replace(/=+$/, "");
 }
 
-export function parseToken(token: string): AuthClientSession | null {
+export function parseToken(
+  token: string,
+  salts: number[] = []
+): AuthClientSession | null {
   try {
     const { sid, uid, name } = Shuttle.parse<AuthClientSession>(
-      base64UrlToUint8Array(token)
+      base64UrlToUint8Array(token),
+      { salts, md5: true }
     );
     if (typeof sid !== "string") return null;
     if (uid !== undefined && typeof uid !== "string") return null;
@@ -36,6 +40,9 @@ export function parseToken(token: string): AuthClientSession | null {
   return null;
 }
 
-export function serializeToken(token: AuthClientSession): string {
-  return uint8ArrayToBase64Url(Shuttle.serialize(token));
+export function serializeToken(
+  token: AuthClientSession,
+  salts: number[] = []
+): string {
+  return uint8ArrayToBase64Url(Shuttle.serialize(token, { salts, md5: true }));
 }

@@ -42,7 +42,9 @@ class Verification {
       this.kill();
       return false;
     }
-    return code === this.code;
+    const isVerified = code === this.code;
+    if (isVerified) this.kill();
+    return isVerified;
   }
 }
 

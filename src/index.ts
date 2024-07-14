@@ -162,9 +162,9 @@ export default class Auth extends MongooseBase {
     "Session",
     new this.mongoose.Schema(
       {
-        us: type(String),
+        us: type(String, false),
         ul: type([String]),
-        pf: type(String),
+        pf: type(String, false),
         ip: type([String]),
         ua: type([String]),
         ct: type(Date),

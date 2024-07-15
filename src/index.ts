@@ -340,6 +340,52 @@ export default class Auth extends MongooseBase {
     return { valid: true, exists: true, id: user.id, username: user.un };
   }
 
+  readonly oneTimeLinkResolvers = new Map<string, () => void>();
+
+  async createOneTimeLinkPending(
+    usernameOrEmailAddress: string,
+    callbackURL: string
+  ): Promise<
+    | ({ valid: true; exists: true } & UserSummary)
+    | { valid: false; exists: boolean }
+  > {
+    if (!usernameOrEmailAddress) return { valid: false, exists: false };
+    const user = await this.User.findOne(
+      { $or: [{ ea: usernameOrEmailAddress }, { un: usernameOrEmailAddress }] },
+      { _id: 0, id: 1, un: 1, ea: 1 }
+    );
+    if (!user) return { valid: false, exists: false };
+    return new Promise((resolve) => {
+      const { id, ea: emailAddress, un: username } = user;
+      const key = random.base64url(16);
+      if (this.oneTimeLinkResolvers.has(key)) throw new Error("Not Possible");
+      const kill = () => this.oneTimeLinkResolvers.delete(key);
+      const timeout = setTimeout(() => {
+        kill();
+        resolve({ valid: false, exists: true });
+      }, 5 * 60000);
+      this.oneTimeLinkResolvers.set(key, () => {
+        clearTimeout(timeout);
+        kill();
+        resolve({ valid: true, exists: true, id, username });
+      });
+      this.eav.mailer.sendText(
+        emailAddress,
+        `Sign In - ${this.eav.appName}`,
+        `Here is your sign in one-time link:\n\n${callbackURL}?key=${key}\n\n` +
+          +"Do not share this information with anyone.\n" +
+          "The one-time link is valid for 3 minutes.\n" +
+          "If you are unsure of the intended purpose of this link, kindly disregard this email.\n" +
+          "This is an automated email. Please do not reply."
+      );
+    });
+  }
+
+  solveOneTimeLink(key: string) {
+    const resolve = this.oneTimeLinkResolvers.get(key);
+    if (resolve) resolve();
+  }
+
   async hasUser(user: Partial<RawUser>) {
     return Boolean(await this.User.exists(user));
   }

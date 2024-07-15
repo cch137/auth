@@ -182,7 +182,7 @@ export default class Auth extends MongooseBase {
     let i = 3;
     while (i--) {
       try {
-        const id = random.base64(16);
+        const id = random.base64url(16);
         if (await this.hasUser({ id })) continue;
         return id;
       } catch {}

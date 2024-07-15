@@ -490,7 +490,7 @@ export default class Auth extends MongooseBase {
     if (!sessionId) return;
     await this.Session.updateOne(
       { _id: sessionId },
-      { $addToSet: { ip, ua, at: new Date() } }
+      { $addToSet: { ip, ua }, $set: { at: new Date() } }
     );
   }
 

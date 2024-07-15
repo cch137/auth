@@ -408,7 +408,7 @@ export default class Auth extends MongooseBase {
     if (!userId) return null;
     const user = await this.User.findOne(
       { id: userId },
-      { _id: 0, pw: 0, id: 1, un: 1 }
+      { _id: 0, id: 1, un: 1 }
     );
     if (!user) return null;
     return { id: user.id, username: user.un };
@@ -418,7 +418,7 @@ export default class Auth extends MongooseBase {
     if (!userId) return null;
     const user = await this.User.findOne(
       { id: userId },
-      { _id: 0, pw: 0, id: 1, un: 1 }
+      { _id: 0, id: 1, un: 1 }
     );
     if (!user) return null;
     return { id: user.id, username: user.un, createdTime: user.ct };

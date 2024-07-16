@@ -225,12 +225,12 @@ export default class Auth extends MongooseBase {
     password: string;
     emailAddress: string;
     code: string;
-  }): Promise<Result>;
+  }): PResult;
   async changePassword(form: {
     id: string;
     password: string;
     oldPassword: string;
-  }): Promise<Result>;
+  }): PResult;
   async changePassword({
     id,
     emailAddress,
@@ -381,9 +381,13 @@ export default class Auth extends MongooseBase {
     });
   }
 
-  solveOneTimeLink(key: string) {
+  async solveOneTimeLink(key: string) {
     const resolve = this.oneTimeLinkResolvers.get(key);
-    if (resolve) resolve();
+    if (resolve) {
+      resolve();
+      return true;
+    }
+    return false;
   }
 
   async hasUser(user: Partial<RawUser>) {

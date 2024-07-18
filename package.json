@@ -1,6 +1,6 @@
 {
   "name": "@cch137/auth",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "",
   "type": "module",
   "main": "index.js",
@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@cch137/random": "^0.1.2",
-    "@cch137/shuttle": "^0.2.6",
+    "@cch137/shuttle": "^0.2.7",
     "@types/mongoose": "^5.11.97",
     "crypto-js": "^4.2.0",
     "email-validator": "^2.0.4",

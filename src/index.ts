@@ -373,7 +373,7 @@ export default class Auth extends MongooseBase {
         emailAddress,
         `Sign In - ${this.eav.appName}`,
         `Here is your sign in one-time link:\n\n${callbackURL}?key=${key}\n\n` +
-          +"Do not share this information with anyone.\n" +
+          "Do not share this information with anyone.\n" +
           "The one-time link is valid for 3 minutes.\n" +
           "If you are unsure of the intended purpose of this link, kindly disregard this email.\n" +
           "This is an automated email. Please do not reply."

@@ -187,6 +187,7 @@ export default class Auth extends MongooseBase {
         pf: type(String, false),
         ip: type([String]),
         ua: type([String]),
+        ge: type([{ lon: Number, lat: Number, acc: Number }]),
         ct: type(Date),
         at: type(Date),
       },
@@ -515,6 +516,21 @@ export default class Auth extends MongooseBase {
     await this.Session.updateOne(
       { _id: sessionId },
       { $addToSet: { ip, ua }, $set: { at: new Date() } }
+    );
+  }
+
+  async trackUserGeo(
+    sessionId?: string,
+    lat?: number,
+    lon?: number,
+    acc?: number
+  ) {
+    if (!sessionId) return;
+    if (typeof lat !== "number" || typeof lon !== "number") return;
+    if (typeof acc !== "number") acc = NaN;
+    await this.Session.updateOne(
+      { _id: sessionId },
+      { $addToSet: { ge: { lat, lon, acc } }, $set: { at: new Date() } }
     );
   }
 

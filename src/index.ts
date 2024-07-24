@@ -511,26 +511,19 @@ export default class Auth extends MongooseBase {
     );
   }
 
-  async trackUserDevice(sessionId?: string, ip?: string, ua?: string) {
-    if (!sessionId) return;
-    await this.Session.updateOne(
-      { _id: sessionId },
-      { $addToSet: { ip, ua }, $set: { at: new Date() } }
-    );
-  }
-
-  async trackUserGeo(
+  async trackUserDevice(
     sessionId?: string,
-    lat?: number,
-    lon?: number,
-    acc?: number
+    ip?: string,
+    ua?: string,
+    ge?: { lat: number; lon: number; acc: number }
   ) {
     if (!sessionId) return;
-    if (typeof lat !== "number" || typeof lon !== "number") return;
-    if (typeof acc !== "number") acc = NaN;
+    if (!ge || typeof ge.lat !== "number" || typeof ge.lon !== "number")
+      ge = undefined;
+    if (ge && typeof ge.acc !== "number") ge.acc = NaN;
     await this.Session.updateOne(
       { _id: sessionId },
-      { $addToSet: { ge: { lat, lon, acc } }, $set: { at: new Date() } }
+      { $addToSet: { ip, ua, ge }, $set: { at: new Date() } }
     );
   }
 

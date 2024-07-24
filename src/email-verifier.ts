@@ -19,7 +19,7 @@ class Verification {
   // default timeout 15 minutes
   constructor(email: string, timeoutMs = 900000) {
     this.email = email;
-    this.timeout = setTimeout(() => this.kill(), timeoutMs);
+    this.timeout = setTimeout(() => this.#kill(), timeoutMs);
     Verification.codes.push(this);
   }
 
@@ -27,11 +27,11 @@ class Verification {
   readonly email: string;
   readonly code = random.base16(8).toUpperCase();
 
-  private readonly timeout: NodeJS.Timeout;
+  readonly timeout: NodeJS.Timeout;
   sentTimes = 0;
   verifyTryTimes = 0;
 
-  private kill() {
+  #kill() {
     clearTimeout(this.timeout);
     const index = Verification.codes.indexOf(this);
     if (index !== -1) Verification.codes.splice(index, 1);
@@ -39,11 +39,11 @@ class Verification {
 
   verify(code: string) {
     if (++this.verifyTryTimes > Verification.MAX_TRIES) {
-      this.kill();
+      this.#kill();
       return false;
     }
     const isVerified = code === this.code;
-    if (isVerified) this.kill();
+    if (isVerified) this.#kill();
     return isVerified;
   }
 }

@@ -187,7 +187,6 @@ export default class Auth extends MongooseBase {
         pf: type(String, false),
         ip: type([String]),
         ua: type([String]),
-        ge: type([{ lon: Number, lat: Number, acc: Number }]),
         ct: type(Date),
         at: type(Date),
       },
@@ -511,19 +510,11 @@ export default class Auth extends MongooseBase {
     );
   }
 
-  async trackUserDevice(
-    sessionId?: string,
-    ip?: string,
-    ua?: string,
-    ge?: { lat: number; lon: number; acc: number }
-  ) {
+  async trackUserDevice(sessionId?: string, ip?: string, ua?: string) {
     if (!sessionId) return;
-    if (!ge || typeof ge.lat !== "number" || typeof ge.lon !== "number")
-      ge = undefined;
-    if (ge && typeof ge.acc !== "number") ge.acc = NaN;
     await this.Session.updateOne(
       { _id: sessionId },
-      { $addToSet: { ip, ua, ge }, $set: { at: new Date() } }
+      { $addToSet: { ip, ua }, $set: { at: new Date() } }
     );
   }
 

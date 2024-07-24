@@ -141,7 +141,7 @@ export default class Auth extends MongooseBase {
 
   readonly eav: EmailAddressVerifier;
 
-  get eavCreateVerificationa() {
+  get eavCreateVerification() {
     return this.eav.createVerification;
   }
 
